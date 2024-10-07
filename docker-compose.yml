@@ -1,0 +1,41 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./:/var/www/
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 8878:80
+    depends_on:
+      - app
+    container_name: fm_nginx
+
+  app:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - db
+    container_name: fm_app
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: lardocker
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 8102:3306
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --lower_case_table_names=1
+    container_name: fm_db
+  # nginx:
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./:/var/www/
+  #     - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+  #   ports:
+  #     - 8877:80
