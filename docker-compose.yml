@@ -39,3 +39,9 @@ services:
   #     - ./_docker/nginx/conf.d:/etc/nginx/conf.d
   #   ports:
   #     - 8877:80
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
