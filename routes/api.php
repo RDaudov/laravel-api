@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/directories', [DirectoryController::class, 'index'])->middleware('auth:sanctum');
@@ -37,6 +38,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/files/{file}/toggle-public', [FileController::class, 'togglePublic']);
     Route::get('/disk-usage', [FileController::class, 'diskUsage']);
     Route::get('/files', [FileController::class, 'index'])->middleware('auth:sanctum');
+    Route::middleware('auth:sanctum')->get('/directories/{id}/files', [DirectoryController::class, 'getFiles']);
 });
 
 Route::get('/download/{uniqueLink}', [FileController::class, 'download']);
+
+Route::middleware('auth:sanctum')->get('/directories/{id}/files', [DirectoryController::class, 'getFiles']);
+
+Route::post('webhook', [\App\Http\Controllers\Api\TelegramController::class, 'handleWebhook']);
