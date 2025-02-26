@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TelegramController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -40,3 +41,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::get('/download/{uniqueLink}', [FileController::class, 'download']);
+
+
+Route::post('/webhook', [TelegramController::class, 'handleWebhook']);
+
